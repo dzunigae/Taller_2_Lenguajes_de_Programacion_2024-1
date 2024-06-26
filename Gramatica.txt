@@ -1,0 +1,93 @@
+//Comodines básicos
+<e> ::= e | E
+<mas_menos> ::= + | -
+<multiplicacion_division> ::= * | /
+<separador> ::= |
+<llave_abriendo> ::= {
+<llave_cerrando> ::= }
+<espacio> ::=  
+
+//Operadores
+<operador_aritmético> ::= ** | <mas_menos> | <multiplicacion_division>
+<operador_relacional> ::= == | != | < | > | <= | >=
+<y_o> ::= y | o 
+
+//Datos básicos
+<letra> ::= a | b | c | d | f | g | h | i | j | k | l | m | n | ñ | o | p | q | r | s | t | u | v | w 
+            | x | y | z | A | B | C | D | F | G | H | I | J | K | L | M | N | Ñ | O | P | Q | R | S 
+            | T | U | V | W | X | Y | Z | _ | <e>
+<digito> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+<simbolo_especial> ::= ° | ¬ | ! | # | $ | % | & | ( | ) | = | ? | \ | ¿ | ¡ | @ | ´ | ¨ | ~ | [ | ] 
+                        | { | } | ` | ^ | ; | , | . | : | - | < | > | <separador>
+
+//Comodines compuestos
+<caracter_valido> ::= <letra> | <digito>
+<notacion_cientifica> ::= <e>[<mas_menos>]<digito>{<digito>}
+<caracter_en_general> ::= <caracter_valido> | <simbolo_especial> | <mas_menos> 
+                            | <multiplicacion_division> | <espacio>
+<caracter_en_general_mas_comilla_simple> ::= <caracter_en_general> | '
+<caracter_en_general_mas_comilla_doble> ::= <caracter_en_general> | "
+
+//Datos compuestos
+<id> ::= <letra>{<caracter_valido>}
+<entero> ::= [-]<digito>{<digito>}[<notacion_cientifica>]
+<flotante> ::= [-]<digito>{<digito>}.<digito>{<digito>}[<notacion_cientifica>]
+<string> ::= "{<caracter_en_general_mas_comilla_simple>}"
+<char> ::= '<caracter_en_general_mas_comilla_doble>'
+<numero> ::= <entero> | <flotante>
+
+//Datos especiales
+<funcion_del_lenguaje> ::= div | mod | ordenar_mayor | ordenar_menor | tipo | tamaño | multicotomizacion 
+                            | datos_modelo | datos_bloque | datos_tratamiento | conjunto_datos 
+                            | conjunto_datos_bloque | conjunto_datos_tratamiento | numero_rachas_hasta_dato 
+                            | rachas_celda | promedio_rachas_celda | rachas_bloque | rachas_tratamiento
+                            | promedio_rachas_bloque | promedio_rachas_tratamiento | rachas_modelo 
+                            | promedio_rachas_modelo
+
+//Expresiones
+<parametro_dato> ::= <id> | <string> | <char> | <numero> | <invocacion_de_funcion>
+<termino_aritmetico> ::= <parametro_dato> | (<expresion_aritmetica>)
+<expresion_aritmetica> ::= {-}<termino_aritmetico> | <expresion_aritmetica><operador_aritmético>{-}<termino_aritmetico>
+<expresion_relacional> ::= <expresion_aritmetica><operador_relacional><expresion_aritmetica>
+<expresion_relacional_compuesta> ::= {no}<expresion_relacional> | {no}({no}<expresion_relacional_compuesta>)
+<termino_logico> ::= <expresion_relacional_compuesta> | (<expresion_logica>)
+<expresion_logica> ::= {no}<termino_logico> | <expresion_logica><y_o>{no}<termino_logico>
+
+<conjunto_expresiones> ::= <expresion_logica> | <expresion_aritmetica>
+
+//SENTENCIAS
+//Comodines para las sentencias
+<condicional_anidado> ::= <llave_abriendo><rutina><llave_cerrando> | condicional
+<interior_switch> ::= <id><operador_relacional><expresion_aritmetica>:<rutina>;
+<valores_de_retorno> ::= <conjunto_expresiones> | nada
+
+<imprimir_en_consola> ::= mostrar(<conjunto_expresiones>);
+<condicional> ::= si(<expresion_logica>)<llave_abriendo><rutina><llave_cerrando>
+                    [sino <condicional_anidado>]
+<switch> ::= caso(<id>)<llave_abriendo><interior_switch>{<interior_switch>}<llave_cerrando>
+<bucle_repita_mientras> ::= repita<llave_abriendo><rutina><llave_cerrando>mientras(<expresion_logica>)
+<bucle_mientras> ::= mientras(<expresion_logica>)<llave_abriendo><rutina><llave_cerrando>
+<bucle_para> ::= para(entero<id>=<expresion_aritmetica>hasta<id>==<expresion_aritmetica>)
+                    <llave_abriendo><rutina><llave_cerrando>
+<retornar_valor> ::= retornar<valores_de_retorno>
+<asignacion> ::= ???????????????????????????
+
+//DECLARACION DE VARIABLES
+<entero> ::= entero<id>=<expresion_aritmetica>;
+<real> ::= real<id>=<expresion_aritmetica>;
+<cadena> ::= cadena<id>=<expresion_aritmetica>;
+<simbolo> ::= simbolo<id>=<expresion_aritmetica>;
+<racha> ::= racha<id>=<expresion_aritmetica>;
+
+//FUNCIONES
+//Comodines para las funciones
+<parametro_funcion> ::= ({<expresion_aritmetica>,}<expresion_aritmetica>)
+<funcion> ::= <funcion_del_lenguaje> | <id>
+
+//Acciones de las funciones
+<invocacion_de_funcion> ::= <funcion><parametro_funcion>
+
+//Definir funciones
+
+
+<rutina>
