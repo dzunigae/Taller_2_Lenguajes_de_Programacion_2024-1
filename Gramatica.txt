@@ -5,6 +5,8 @@
 <separador> ::= |
 <llave_abriendo> ::= {
 <llave_cerrando> ::= }
+<corchete_abriendo> ::= [
+<corchete_cerrando> ::= ]
 <espacio> ::=  
 
 //Operadores
@@ -73,11 +75,16 @@
 <asignacion> ::= ???????????????????????????
 
 //DECLARACION DE VARIABLES
+//Comodines de las variables
+
 <entero> ::= entero<id>=<expresion_aritmetica>;
 <real> ::= real<id>=<expresion_aritmetica>;
 <cadena> ::= cadena<id>=<expresion_aritmetica>;
-<simbolo> ::= simbolo<id>=<expresion_aritmetica>;
+<simbolo> ::= simbolo<id>=<char>;
 <racha> ::= racha<id>=<expresion_aritmetica>;
+<arreglo_implícito> ::= arreglo<id><corchete_abriendo><entero><corchete_cerrando>=
+                        <corchete_abriendo><corchete_cerrando>
+<arreglo_explicito> ::= arreglo<id>=<corchete_abriendo><corchete_cerrando>
 
 //FUNCIONES
 //Comodines para las funciones
