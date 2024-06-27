@@ -95,19 +95,27 @@ def t_error(t):
     print("Carácter ilegal '%s'" % t.value[0])
     t.lexer.skip(1)
 
+# Asociatividad y precedencia de los operadores
+precedence = (
+    ('left', 'MAS', 'RESTA'),
+    ('left', 'MULTIPLICACION', 'DIVISION'),
+    ('right', 'POTENCIACION'),
+)
+
+# Reglas de producción
+
+
 # Construir el lexer
 lexer = lex.lex()
 
 # Ejemplo de uso del lexer
 if __name__ == "__main__":
     data = '''
+"<simbolo_especial> ::= ° | ¬ | ! | # | $ | % | & | ( | ) | = | ? | \\ | ¿ | ¡ | @ | ´ | ¨ | ~ | [ | ] 
+                        | { | } | ` | ^ | ; | , | . | : | - | < | > | <separador>"
     '''
 
     lexer.input(data)
 
-    # Iterar sobre los tokens
-    while True:
-        tok = lexer.token()
-        if not tok:
-            break
+    for tok in lexer:
         print(tok)

@@ -1,5 +1,5 @@
 //Comodines básicos
-<e> ::= e | E
+<es> ::= e | E
 <mas_menos> ::= + | -
 <multiplicacion_division> ::= * | /
 <separador> ::= |
@@ -17,14 +17,14 @@
 //Datos básicos
 <letra> ::= a | b | c | d | f | g | h | i | j | k | l | m | n | ñ | o | p | q | r | s | t | u | v | w 
             | x | y | z | A | B | C | D | F | G | H | I | J | K | L | M | N | Ñ | O | P | Q | R | S 
-            | T | U | V | W | X | Y | Z | _ | <e>
+            | T | U | V | W | X | Y | Z | _ | <es>
 <digito> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 <simbolo_especial> ::= ° | ¬ | ! | # | $ | % | & | ( | ) | = | ? | \ | ¿ | ¡ | @ | ´ | ¨ | ~ | [ | ] 
                         | { | } | ` | ^ | ; | , | . | : | - | < | > | <separador>
 
 //Comodines compuestos
 <caracter_valido> ::= <letra> | <digito>
-<notacion_cientifica> ::= <e>[<mas_menos>]<digito>{<digito>}
+<notacion_cientifica> ::= <es>[<mas_menos>]<digito>{<digito>}
 <caracter_en_general> ::= <caracter_valido> | <simbolo_especial> | <mas_menos> 
                             | <multiplicacion_division> | <espacio>
 <caracter_en_general_mas_comilla_simple> ::= <caracter_en_general> | '
