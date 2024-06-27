@@ -97,7 +97,6 @@ Arreglos (Son sumamente flexibles, pueden tener cualquier tipo de dato dentro de
 
 ## Operaciones sobre los datos de la teoría de rachas
 **add:** Para añadir un nuevo símbolo al alfabeto.  
-**posicion:** Para obtener un símbolo del alfabeto.  
 
 ## Estructuras de inicio y finalización del bloque principal
 **inicio_main:** Inicio de la secuencia principal del programa.  

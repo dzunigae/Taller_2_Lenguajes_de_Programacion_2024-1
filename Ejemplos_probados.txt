@@ -69,13 +69,11 @@ modelo_y.delta = [
 ]; ## Con delta, los datos se acomodan de forma automática en el modelo.
 ## Para acceder a valores de celdas, filas o columnas, es de la siguiente manera.
 ## Celda 1-1
-modelo_y.delta.[1][1];
+modelo_y.delta[1][1];
 ## Fila 1
-modelo_y.delta.[1][];
+modelo_y.delta[1][];
 ## Columna 1
-modelo_y.delta.[][1];
-# En caso de requerir iterar sobre estas estructuras, se puede hacer algo como lo siguiente: 
-modelo_y.delta.{i}{j} donde i y j son iteradores. #
+modelo_y.delta[][1];
 
 funcion nada mostrar_valor(entero x){
     mostrar(x);
@@ -135,13 +133,13 @@ funcion nada ciclos(arreglo x, arreglo yy){
 funcion cadena alfabeto_y_valores(arreglo valores, alfabeto relacionado){
     para(i = 0 hasta i == tamaño(valores)){
         si(valores >= 0.0 y valores < 5.0){
-            retornar relacionado.posicion[0];
+            retornar relacionado[0];
         }sino si(valores >= 5.0 y valores < 7.0){
-            retornar relacionado.posicion[1];
+            retornar relacionado[1];
         }sino si(valores >= 7.0 y valores < 9.0){
-            retornar relacionado.posicion[2];
+            retornar relacionado[2];
         }sino si(valores >= 9.0 y valores < 10.0){
-            retornar relacionado.posicion[3];
+            retornar relacionado[3];
         }
     }
 }
