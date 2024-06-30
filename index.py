@@ -111,6 +111,10 @@ def t_error(t):
 
 # REGLAS DE PRODUCCIÓN
 
+# Definir una regla para manejar errores de sintaxis
+def p_error(p):
+    print("Error de sintaxis en '%s'" % p.value if p else "EOF")
+
 # Vacío
 
 def p_empty(p):
@@ -816,10 +820,6 @@ def p_start(p):
     start : zona_de_asignaciones zona_de_funciones zona_principal
     '''
     p[0] = (p[1], p[2], p[3])
-
-# Definir una regla para manejar errores de sintaxis
-def p_error(p):
-    print("Error de sintaxis!")
 
 ########################################################################################
 ########################################################################################
