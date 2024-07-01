@@ -110,99 +110,171 @@
                          | <expresion_aritmetica>
 
 //DECLARACION DE VARIABLES
-<datos_comunes_y_rachas> ::= ENTERO | REAL | CADENA | SIMBOLO | RACHA
+
+<datos_comunes_y_rachas> ::= ENTERO 
+                           | REAL 
+                           | CADENA 
+                           | SIMBOLO 
+                           | RACHA
 
 //Comodines de las variables
-<contenido_lista_explicita> ::= <expresion_aritmetica> | <lista_explicita>
-<contenido_lista_explicita_plus> ::= <contenido_lista_explicita_plus> <contenido_lista_explicita> COMA | empty
-<lista_explicita> ::= CORCHETE_ABRIENDO <contenido_lista_explicita_plus> <contenido_lista_explicita>
-                    CORCHETE_CERRANDO
-<interior_delta_plus> ::= <interior_delta_plus> CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO
-                            CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO COLON <lista_explicita> COMA | empty
-<interior_delta> ::= <interior_delta_plus> CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO
-                        CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO COLON <lista_explicita>
 
-<declaracion_datos_comunes_y_rachas> ::= <datos_comunes_y_rachas> ID ASSIGNMENT_OPERATOR 
-                                            <expresion_aritmetica> PUNTO_COMA
+<contenido_lista_explicita> ::= <expresion_aritmetica> 
+                              | <lista_explicita>
+
+<contenido_lista_explicita_plus> ::= <contenido_lista_explicita> COMA <contenido_lista_explicita_plus>
+                                   | empty
+
+<lista_explicita> ::= CORCHETE_ABRIENDO <contenido_lista_explicita_plus> <contenido_lista_explicita> CORCHETE_CERRANDO
+
+<interior_delta_plus> ::= CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO COLON <lista_explicita> COMA <interior_delta_plus>
+                        | empty
+
+<interior_delta> ::= <interior_delta_plus> CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO COLON <lista_explicita>
+
+<declaracion_datos_comunes_y_rachas> ::= <datos_comunes_y_rachas> ID ASSIGNMENT_OPERATOR <expresion_aritmetica> PUNTO_COMA
 
 //Arreglos
-<arreglo_implicito> ::= ARREGLO ID CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO ASSIGNMENT_OPERATOR
-                        CORCHETE_ABRIENDO CORCHETE_CERRANDO PUNTO_COMA
+
+<arreglo_implicito> ::= ARREGLO ID CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO ASSIGNMENT_OPERATOR CORCHETE_ABRIENDO CORCHETE_CERRANDO PUNTO_COMA
+
 <arreglo_explicito> ::= ARREGLO ID ASSIGNMENT_OPERATOR <lista_explicita> PUNTO_COMA
 
 //Teoría de rachas
-<definicion_explicita_del_alfabeto> ::= <definicion_explicita_del_alfabeto> <expresion_aritmetica> COMA | empty
-<alfabeto_explicito> ::= ALFABETO ID LLAVE_ABRIENDO <definicion_explicita_del_alfabeto> <expresion_aritmetica>
-                        LLAVE_CERRANDO PUNTO_COMA
+
+<definicion_explicita_del_alfabeto> ::= <expresion_aritmetica> COMA <definicion_explicita_del_alfabeto>
+                                      | empty
+
+<alfabeto_explicito> ::= ALFABETO ID LLAVE_ABRIENDO <definicion_explicita_del_alfabeto> <expresion_aritmetica> LLAVE_CERRANDO PUNTO_COMA
+
 <alfabeto_implicito> ::= ALFABETO ID LLAVE_ABRIENDO LLAVE_CERRANDO PUNTO_COMA
-<modelo_explicito> ::= MODELO ID LLAVE_ABRIENDO ALFA COLON <expresion_aritmetica> COMA BETA COLON 
-                        <lista_explicita> COMA TAU COLON <lista_explicita> COMA DELTA CORCHETE_ABRIENDO
-                        <interior_delta> CORCHETE_CERRANDO LLAVE_CERRANDO PUNTO_COMA
-<modelo_implicito> ::= MODELO ID LLAVE_ABRIENDO LLAVE_CERRANDO PUNTO_COMA ID CALL BETA CORCHETE_ABRIENDO INTEGER
-                        CORCHETE_CERRANDO PUNTO_COMA ID CALL TAU CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO PUNTO_COMA
-                        ID CALL DELTA CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CORCHETE_ABRIENDO INTEGER 
-                        CORCHETE_CERRANDO PUNTO_COMA
-                        | ID CALL BETA CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CALL TAU CORCHETE_ABRIENDO 
-                        INTEGER CORCHETE_CERRANDO CALL DELTA CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO
-                        CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO PUNTO_COMA
+
+<modelo_explicito> ::= MODELO ID LLAVE_ABRIENDO ALFA COLON <expresion_aritmetica> COMA BETA COLON <lista_explicita> COMA TAU COLON <lista_explicita> COMA DELTA CORCHETE_ABRIENDO <interior_delta> CORCHETE_CERRANDO LLAVE_CERRANDO PUNTO_COMA
+
+<modelo_implicito> ::= MODELO ID LLAVE_ABRIENDO LLAVE_CERRANDO PUNTO_COMA ID CALL BETA CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO PUNTO_COMA ID CALL TAU CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO PUNTO_COMA ID CALL DELTA CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO PUNTO_COMA
+                     | ID CALL BETA CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CALL TAU CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CALL DELTA CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO PUNTO_COMA
 
 //SENTENCIAS
+
 //Comodines para las sentencias
-<entero_o_vacio> ::= INTEGER | empty
-<lista_de_llamados> ::= <lista_de_llamados> CORCHETE_ABRIENDO <entero_o_vacio> CORCHETE_CERRANDO | empty
-<condicional_anidado> ::= SINO LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO | SINO <condicional> | empty
-<interior_switch> ::= <interior_switch> <id_compuesto> <operador_relacional> <expresion_aritmetica> COLON <rutina> 
-                        PUNTO_COMA | empty
+
+<entero_o_vacio> ::= INTEGER 
+                   | empty
+
+<lista_de_llamados> ::= CORCHETE_ABRIENDO <entero_o_vacio> CORCHETE_CERRANDO <lista_de_llamados>
+                      | empty
+
+<condicional_anidado_prima> ::= LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO
+                              | <condicional>
+
+<condicional_anidado> ::= SINO <condicional_anidado_prima>
+                        | empty
+
+<interior_switch> ::= <id_compuesto> <operador_relacional> <expresion_aritmetica> COLON <rutina> PUNTO_COMA <interior_switch>
+                    | empty
+
 <variables_del_modelo_extendidas> ::= <variables_del_modelo> <lista_de_llamados>
-<valores_de_retorno> ::= <conjunto_expresiones> | <lista_explicita>
-                            | <variables_del_modelo_extendidas> | NADA
-<posibles_variables_a_reasignar> ::= <id_compuesto> | <variables_del_modelo_extendidas>
-<posibles_asignaciones> ::= <expresion_aritmetica> | <lista_explicita> | <variables_del_modelo_extendidas>
+
+<valores_de_retorno> ::= <conjunto_expresiones> 
+                        | <lista_explicita>
+                        | <variables_del_modelo_extendidas> 
+                        | NADA
+
+<posibles_variables_a_reasignar> ::= <id_compuesto> 
+                                   | <variables_del_modelo_extendidas>
+
+<posibles_asignaciones> ::= <expresion_aritmetica> 
+                          | <lista_explicita> 
+                          | <variables_del_modelo_extendidas>
 
 //Sentencias en sí
+
 <imprimir_en_consola> ::= MOSTRAR PAR_ABRIENDO <conjunto_expresiones> PAR_CERRANDO PUNTO_COMA
-<condicional> ::= SI PAR_ABRIENDO <expresion_logica> PAR_CERRANDO LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO
-                    <condicional_anidado>
+
+<condicional> ::= SI PAR_ABRIENDO <expresion_logica> PAR_CERRANDO LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO <condicional_anidado>
+
 <switch> ::= CASO PAR_ABRIENDO <id_compuesto> PAR_CERRANDO LLAVE_ABRIENDO <interior_switch> LLAVE_CERRANDO
-<bucle_repita_mientras> ::= REPITA LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO MIENTRAS PAR_ABRIENDO <expresion_logica>
-                            PAR_CERRANDO
+
+<bucle_repita_mientras> ::= REPITA LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO MIENTRAS PAR_ABRIENDO <expresion_logica> PAR_CERRANDO
+
 <bucle_mientras> ::= MIENTRAS PAR_ABRIENDO <expresion_logica> PAR_CERRANDO LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO
-<bucle_para> ::= PARA PAR_ABRIENDO ENTERO ID ASSIGNMENT_OPERATOR <expresion_aritmetica> HASTA ID IGUAL_QUE 
-                    <expresion_aritmetica> PAR_CERRANDO LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO
+
+<bucle_para> ::= PARA PAR_ABRIENDO ENTERO ID ASSIGNMENT_OPERATOR <expresion_aritmetica> HASTA ID IGUAL_QUE <expresion_aritmetica> PAR_CERRANDO LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO
+
 <retornar_valor> ::= RETORNAR <valores_de_retorno>
-<declaracion> ::= <declaracion_datos_comunes_y_rachas> | <arreglo_implicito> | <arreglo_explicito>
-                    | <alfabeto_explicito> | <alfabeto_implicito> | <modelo_explicito>
-                    | <modelo_implicito>
+
+<declaracion> ::= <declaracion_datos_comunes_y_rachas> 
+                | <arreglo_implicito> 
+                | <arreglo_explicito>
+                | <alfabeto_explicito> 
+                | <alfabeto_implicito> 
+                | <modelo_explicito>
+                | <modelo_implicito>
+
 <asignacion> ::= <posibles_variables_a_reasignar> ASSIGNMENT_OPERATOR <posibles_asignaciones>
+
 <anadir_a_alfabeto> ::= <id_compuesto> CALL ADD PAR_ABRIENDO CHARACTER PAR_CERRANDO PUNTO_COMA
 
-<sentencias> ::= <imprimir_en_consola> | <condicional> | <switch> | <bucle_repita_mientras>
-                    | <bucle_mientras> | <bucle_para> | <retornar_valor> | <declaracion> | <asignacion> 
-                    | <anadir_a_alfabeto>
+<sentencias> ::= <imprimir_en_consola> 
+                | <condicional> 
+                | <switch> 
+                | <bucle_repita_mientras>
+                | <bucle_mientras> 
+                | <bucle_para> 
+                | <retornar_valor> 
+                | <declaracion> 
+                | <asignacion> 
+                | <anadir_a_alfabeto>
 
 //FUNCIONES
+
 //Comodines para las funciones
-<expresiones_separadas_por_comas> ::= <expresiones_separadas_por_comas> <expresion_aritmetica> COMA | empty
-<declaracion_de_datos_separados_por_comas> ::= <declaracion_de_datos_separados_por_comas> 
-                                                <datos_que_se_pueden_declarar> ID COMA | empty
-<mas_de_una_declaracion> ::= <declaracion_de_datos_separados_por_comas> <datos_que_se_pueden_declarar> ID | empty
+
+<expresiones_separadas_por_comas> ::= <expresion_aritmetica> COMA <expresiones_separadas_por_comas>
+                                    | empty
+
+<declaracion_de_datos_separados_por_comas> ::= <datos_que_se_pueden_declarar> ID COMA <declaracion_de_datos_separados_por_comas>
+                                             | empty
+
+<mas_de_una_declaracion> ::= <declaracion_de_datos_separados_por_comas> <datos_que_se_pueden_declarar> ID 
+                           | empty
+
 <parametro_funcion> ::= PAR_ABRIENDO <expresiones_separadas_por_comas> <expresion_aritmetica> PAR_CERRANDO
-<funcion> ::= <funcion_del_lenguaje> | ID
-<datos_que_se_pueden_declarar> ::= <datos_comunes_y_rachas> | ARREGLO | ALFABETO | MODELO
-<datos_que_se_pueden_declarar_y_nada> ::= <datos_que_se_pueden_declarar> | NADA
+
+<funcion> ::= <funcion_del_lenguaje> 
+            | ID
+
+<datos_que_se_pueden_declarar> ::= <datos_comunes_y_rachas> 
+                                 | ARREGLO 
+                                 | ALFABETO 
+                                 | MODELO
+
+<datos_que_se_pueden_declarar_y_nada> ::= <datos_que_se_pueden_declarar> 
+                                        | NADA
 
 //Definir funciones
-<definicion_de_funcion> ::= FUNCION <datos_que_se_pueden_declarar_y_nada> ID PAR_ABRIENDO <mas_de_una_declaracion>
-                            PAR_CERRANDO LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO
+
+<definicion_de_funcion> ::= FUNCION <datos_que_se_pueden_declarar_y_nada> ID PAR_ABRIENDO <mas_de_una_declaracion> PAR_CERRANDO LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO
 
 //Invocación
+
 <invocacion_de_funcion> ::= <funcion> <parametro_funcion>
 
 //RUTINAS
-<rutina> ::= <rutina> <sentencias> | empty
 
-<zona_de_asignaciones> ::= <zona_de_asignaciones> <declaracion> | empty
-<zona_de_funciones> ::= <zona_de_funciones> <definicion_de_funcion> | empty
+<rutina> ::= <sentencias> <rutina>
+           | empty
+
+// ESTRUCTURA DEL SISTEMA
+
+<zona_de_asignaciones> ::= <declaracion> <zona_de_asignaciones>
+                         | empty
+
+<zona_de_funciones> ::= <definicion_de_funcion> <zona_de_funciones>
+                      | empty
+
 <zona_principal> ::= INICIO <rutina> FIN
+
+// SÍMBOLO DEL SISTEMA
 
 <start> ::= <zona_de_asignaciones> <zona_de_funciones> <zona_principal>

@@ -437,7 +437,11 @@ def p_conjunto_expresiones(p):
 
 # DECLARACION DE VARIABLES
 
-# <datos_comunes_y_rachas> ::= ENTERO | REAL | CADENA | SIMBOLO | RACHA
+#<datos_comunes_y_rachas> ::= ENTERO 
+#                           | REAL 
+#                           | CADENA 
+#                           | SIMBOLO 
+#                           | RACHA
 def p_datos_comunes_y_rachas(p):
     '''
     datos_comunes_y_rachas : ENTERO
@@ -450,7 +454,8 @@ def p_datos_comunes_y_rachas(p):
 
 # Comodines de las variables
 
-# <contenido_lista_explicita> ::= <expresion_aritmetica> | <lista_explicita>
+#<contenido_lista_explicita> ::= <expresion_aritmetica> 
+#                              | <lista_explicita>
 def p_contenido_lista_explicita(p):
     '''
     contenido_lista_explicita : expresion_aritmetica
@@ -458,45 +463,45 @@ def p_contenido_lista_explicita(p):
     '''
     p[0] = p[1]
 
-# <contenido_lista_explicita_plus> ::= <contenido_lista_explicita_plus> <contenido_lista_explicita> COMA | empty
+#<contenido_lista_explicita_plus> ::= <contenido_lista_explicita> COMA <contenido_lista_explicita_plus>
+#                                   | empty
 def p_contenido_lista_explicita_plus(p):
     '''
-    contenido_lista_explicita_plus : contenido_lista_explicita_plus contenido_lista_explicita COMA
+    contenido_lista_explicita_plus : contenido_lista_explicita COMA contenido_lista_explicita_plus
                                    | empty
     '''
-    if len(p) == 4: 
-        p[0] = (p[1], p[2])
+    if len(p) == 4:
+        p[0] = (p[1], p[2], p[3])
     else:
         p[0] = None
 
-#<lista_explicita> ::= CORCHETE_ABRIENDO <contenido_lista_explicita_plus> <contenido_lista_explicita>
-#                    CORCHETE_CERRANDO
+#<lista_explicita> ::= CORCHETE_ABRIENDO <contenido_lista_explicita_plus> <contenido_lista_explicita> CORCHETE_CERRANDO
 def p_lista_explicita(p):
     '''
     lista_explicita : CORCHETE_ABRIENDO contenido_lista_explicita_plus contenido_lista_explicita CORCHETE_CERRANDO
     '''
     p[0] = (p[2], p[3])
 
-# <interior_delta_plus> ::= <interior_delta_plus> CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO
-#                            CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO COLON <lista_explicita> COMA | empty
+#<interior_delta_plus> ::= CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO COLON <lista_explicita> COMA <interior_delta_plus>
+#                        | empty
 def p_interior_delta_plus(p):
     '''
-    interior_delta_plus : interior_delta_plus CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO COLON lista_explicita COMA
+    interior_delta_plus : CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO COLON lista_explicita COMA interior_delta_plus
                         | empty
     '''
-    if len(p) == 8:
-        p[0] = (p[1], p[3], p[6])
+    if len(p) == 11:
+        p[0] = (p[2], p[5], p[8], p[10])
     else:
         p[0] = None
 
-# <interior_delta> ::= <interior_delta_plus> CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO COLON <lista_explicita>
+#<interior_delta> ::= <interior_delta_plus> CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO COLON <lista_explicita>
 def p_interior_delta(p):
     '''
     interior_delta : interior_delta_plus CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO COLON lista_explicita
     '''
     p[0] = (p[1], p[3], p[6], p[9])
 
-# <declaracion_datos_comunes_y_rachas> ::= <datos_comunes_y_rachas> ID ASSIGNMENT_OPERATOR <expresion_aritmetica> PUNTO_COMA
+#<declaracion_datos_comunes_y_rachas> ::= <datos_comunes_y_rachas> ID ASSIGNMENT_OPERATOR <expresion_aritmetica> PUNTO_COMA
 def p_declaracion_datos_comunes_y_rachas(p):
     '''
     declaracion_datos_comunes_y_rachas : datos_comunes_y_rachas ID ASSIGNMENT_OPERATOR expresion_aritmetica PUNTO_COMA
@@ -505,7 +510,7 @@ def p_declaracion_datos_comunes_y_rachas(p):
 
 # Arreglos
 
-# <arreglo_implicito> ::= ARREGLO ID CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO ASSIGNMENT_OPERATOR CORCHETE_ABRIENDO CORCHETE_CERRANDO PUNTO_COMA
+#<arreglo_implicito> ::= ARREGLO ID CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO ASSIGNMENT_OPERATOR CORCHETE_ABRIENDO CORCHETE_CERRANDO PUNTO_COMA
 def p_arreglo_implicito(p):
     '''
     arreglo_implicito : ARREGLO ID CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO ASSIGNMENT_OPERATOR CORCHETE_ABRIENDO CORCHETE_CERRANDO PUNTO_COMA
@@ -521,14 +526,15 @@ def p_arreglo_explicito(p):
 
 # Teoría de rachas
 
-# <definicion_explicita_del_alfabeto> ::= <definicion_explicita_del_alfabeto> <expresion_aritmetica> COMA | empty
+#<definicion_explicita_del_alfabeto> ::= <expresion_aritmetica> COMA <definicion_explicita_del_alfabeto>
+#                                      | empty
 def p_definicion_explicita_del_alfabeto(p):
     '''
-    definicion_explicita_del_alfabeto : definicion_explicita_del_alfabeto expresion_aritmetica COMA
+    definicion_explicita_del_alfabeto : expresion_aritmetica COMA definicion_explicita_del_alfabeto
                                       | empty
     '''
     if len(p) == 4: 
-        p[0] = (p[1], p[2])
+        p[0] = (p[1], p[3])
     else:
         p[0] = None
 
@@ -569,7 +575,8 @@ def p_modelo_implicito(p):
 
 # Comodines para las sentencias
 
-# <entero_o_vacío> ::= INTEGER | empty
+# <entero_o_vacío> ::= INTEGER 
+#                    | empty
 def p_entero_o_vacio(p):
     '''
     entero_o_vacio : INTEGER 
@@ -577,40 +584,51 @@ def p_entero_o_vacio(p):
     '''
     p[0] = p[1] if p[1] != 'empty' else None 
 
-# <lista_de_llamados> ::= <lista_de_llamados> CORCHETE_ABRIENDO <entero_o_vacío> CORCHETE_CERRANDO | empty
+#<lista_de_llamados> ::= CORCHETE_ABRIENDO <entero_o_vacio> CORCHETE_CERRANDO <lista_de_llamados>
+#                      | empty
 def p_lista_de_llamados(p):
     '''
-    lista_de_llamados : lista_de_llamados CORCHETE_ABRIENDO entero_o_vacio CORCHETE_CERRANDO 
+    lista_de_llamados : CORCHETE_ABRIENDO entero_o_vacio CORCHETE_CERRANDO lista_de_llamados
                       | empty
     '''
     if len(p) == 5:
-        p[0] = (p[1], p[3])
+        p[0] = (p[2], p[4])
     else:
         p[0] = None
 
-# <condicional_anidado> ::= SINO LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO | SINO <condicional> | empty
+#<condicional_anidado_prima> ::= LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO
+#                              | <condicional>
+def p_condicional_anidado_prima(p):
+    '''
+    condicional_anidado_prima> : LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO
+                               | <condicional>
+    '''
+    if len(p) == 4:
+        p[0] = p[2]
+    else:
+        p[0] = p[1]
+
+#<condicional_anidado> ::= SINO <condicional_anidado_prima>
+#                        | empty
 def p_condicional_anidado(p):
     '''
-    condicional_anidado : SINO LLAVE_ABRIENDO rutina LLAVE_CERRANDO 
-                        | SINO condicional 
+    condicional_anidado : SINO condicional_anidado_prima
                         | empty
     '''
-    if len(p) == 5:
-        p[0] = (p[1], p[3])
-    elif len(p) == 3:
+    if len(p) == 3:
         p[0] = (p[1], p[2])
     else:
         p[0] = None
 
-# <interior_switch> ::= <interior_switch> <id_compuesto> <operador_relacional> <expresion_aritmetica> COLON <rutina> 
-#                        PUNTO_COMA | empty
+#<interior_switch> ::= <id_compuesto> <operador_relacional> <expresion_aritmetica> COLON <rutina> PUNTO_COMA <interior_switch>
+#                    | empty
 def p_interior_switch(p):
     '''
-    interior_switch : interior_switch id_compuesto operador_relacional expresion_aritmetica COLON rutina PUNTO_COMA 
+    interior_switch : id_compuesto operador_relacional expresion_aritmetica COLON rutina PUNTO_COMA interior_switch
                     | empty
     '''
     if len(p) == 8:
-        p[0] = (p[1], p[2], p[3], p[4], p[6])
+        p[0] = (p[1], p[2], p[3], p[5], p[7])
     else:
         p[0] = None
 
@@ -621,7 +639,10 @@ def p_variables_del_modelo_extendidas(p):
     '''
     p[0] = (p[1], p[2])
 
-# <valores_de_retorno> ::= <conjunto_expresiones> | <lista_explicita> <variables_del_modelo_extendidas> | NADA
+#<valores_de_retorno> ::= <conjunto_expresiones> 
+#                        | <lista_explicita>
+#                        | <variables_del_modelo_extendidas> 
+#                        | NADA
 def p_valores_de_retorno(p):
     '''
     valores_de_retorno : conjunto_expresiones 
@@ -631,7 +652,8 @@ def p_valores_de_retorno(p):
     '''
     p[0] = p[1]
 
-# <posibles_variables_a_reasignar> ::= <id_compuesto> | <variables_del_modelo_extendidas>
+#<posibles_variables_a_reasignar> ::= <id_compuesto> 
+#                                   | <variables_del_modelo_extendidas>
 def p_posibles_variables_a_reasignar(p):
     '''
     posibles_variables_a_reasignar : id_compuesto 
@@ -639,7 +661,9 @@ def p_posibles_variables_a_reasignar(p):
     '''
     p[0] = p[1]
 
-# <posibles_asignaciones> ::= <expresion_aritmetica> | <lista_explicita> | <variables_del_modelo_extendidas>
+#<posibles_asignaciones> ::= <expresion_aritmetica> 
+#                          | <lista_explicita> 
+#                          | <variables_del_modelo_extendidas>
 def p_posibles_asignaciones(p):
     '''
     posibles_asignaciones : expresion_aritmetica 
@@ -657,8 +681,7 @@ def p_imprimir_en_consola(p):
     '''
     p[0] = (p[1], p[3])
 
-# <condicional> ::= SI PAR_ABRIENDO <expresion_logica> PAR_CERRANDO LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO
-#                    <condicional_anidado>
+# <condicional> ::= SI PAR_ABRIENDO <expresion_logica> PAR_CERRANDO LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO <condicional_anidado>
 def p_condicional(p):
     '''
     condicional : SI PAR_ABRIENDO expresion_logica PAR_CERRANDO LLAVE_ABRIENDO rutina LLAVE_CERRANDO condicional_anidado
@@ -700,9 +723,13 @@ def p_retornar_valor(p):
     '''
     p[0] = (p[1], p[2])
 
-#<declaracion> ::= <declaracion_datos_comunes_y_rachas> | <arreglo_implicito> | <arreglo_explicito>
-#                    | <alfabeto_explicito> | <alfabeto_implicito> | <modelo_explicito>
-#                    | <modelo_implicito>
+#<declaracion> ::= <declaracion_datos_comunes_y_rachas> 
+#                | <arreglo_implicito> 
+#                | <arreglo_explicito>
+#                | <alfabeto_explicito> 
+#                | <alfabeto_implicito> 
+#                | <modelo_explicito>
+#                | <modelo_implicito>
 def p_declaracion(p):
     '''
     declaracion : declaracion_datos_comunes_y_rachas 
@@ -729,9 +756,16 @@ def p_anadir_a_alfabeto(p):
     '''
     p[0] = (p[1], p[2], p[3], p[5])
 
-#<sentencias> ::= <imprimir_en_consola> | <condicional> | <switch> | <bucle_repita_mientras>
-#                    | <bucle_mientras> | <bucle_para> | <retornar_valor> | <declaracion> | <asignacion> 
-#                    | <añadir_a_alfabeto>
+# <sentencias> ::= <imprimir_en_consola> 
+#                | <condicional> 
+#                | <switch> 
+#                | <bucle_repita_mientras>
+#                | <bucle_mientras> 
+#                | <bucle_para> 
+#                | <retornar_valor> 
+#                | <declaracion> 
+#                | <asignacion> 
+#                | <anadir_a_alfabeto>
 def p_sentencias(p):
     '''
     sentencias : imprimir_en_consola 
@@ -751,30 +785,32 @@ def p_sentencias(p):
 
 # Comodines para las funciones
 
-# <expresiones_separadas_por_comas> ::= <expresiones_separadas_por_comas> <expresion_aritmetica> COMA | empty
+#<expresiones_separadas_por_comas> ::= <expresion_aritmetica> COMA <expresiones_separadas_por_comas>
+#                                    | empty
 def p_expresiones_separadas_por_comas(p):
     '''
-    expresiones_separadas_por_comas : expresiones_separadas_por_comas expresion_aritmetica COMA 
-                                    | empty
+    <expresiones_separadas_por_comas> ::= <expresion_aritmetica> COMA <expresiones_separadas_por_comas>
+                                        | empty
     '''
     if len(p) == 4:
-        p[0] = (p[1], p[2])
+        p[0] = (p[1], p[3])
     else:
         p[0] = None
 
-# <declaracion_de_datos_separados_por_comas> ::= <declaracion_de_datos_separados_por_comas> 
-#                                                <datos_que_se_pueden_declarar> ID COMA | empty
+#<declaracion_de_datos_separados_por_comas> ::= <datos_que_se_pueden_declarar> ID COMA <declaracion_de_datos_separados_por_comas>
+#                                             | empty
 def p_declaracion_de_datos_separados_por_comas(p):
     '''
-    declaracion_de_datos_separados_por_comas : declaracion_de_datos_separados_por_comas datos_que_se_pueden_declarar ID COMA 
+    declaracion_de_datos_separados_por_comas : datos_que_se_pueden_declarar ID COMA declaracion_de_datos_separados_por_comas
                                              | empty
     '''
     if len(p) == 5:
-        p[0] = (p[1], p[2], p[3])
+        p[0] = (p[1], p[2], p[4])
     else:
         p[0] = None
 
-# <mas_de_una_declaracion> ::= <declaracion_de_datos_separados_por_comas> <datos_que_se_pueden_declarar> ID | empty
+#<mas_de_una_declaracion> ::= <declaracion_de_datos_separados_por_comas> <datos_que_se_pueden_declarar> ID 
+#                           | empty
 def p_mas_de_una_declaracion(p):
     '''
     mas_de_una_declaracion : declaracion_de_datos_separados_por_comas datos_que_se_pueden_declarar ID 
@@ -792,7 +828,8 @@ def p_parametro_funcion(p):
     '''
     p[0] = (p[2], p[3])
 
-# <funcion> ::= <funcion_del_lenguaje> | ID
+#<funcion> ::= <funcion_del_lenguaje> 
+#            | ID
 def p_funcion(p):
     '''
     funcion : funcion_del_lenguaje 
@@ -800,7 +837,10 @@ def p_funcion(p):
     '''
     p[0] = p[1]
 
-# <datos_que_se_pueden_declarar> ::= <datos_comunes_y_rachas> | ARREGLO | ALFABETO | MODELO
+#<datos_que_se_pueden_declarar> ::= <datos_comunes_y_rachas> 
+#                                 | ARREGLO 
+#                                 | ALFABETO 
+#                                 | MODELO
 def p_datos_que_se_pueden_declarar(p):
     '''
     datos_que_se_pueden_declarar : datos_comunes_y_rachas 
@@ -810,7 +850,8 @@ def p_datos_que_se_pueden_declarar(p):
     '''
     p[0] = p[1]
 
-# <datos_que_se_pueden_declarar_y_nada> ::= <datos_que_se_pueden_declarar> | NADA
+#<datos_que_se_pueden_declarar_y_nada> ::= <datos_que_se_pueden_declarar> 
+#                                        | NADA
 def p_datos_que_se_pueden_declarar_y_nada(p):
     '''
     datos_que_se_pueden_declarar_y_nada : datos_que_se_pueden_declarar 
@@ -838,10 +879,11 @@ def p_invocacion_de_funcion(p):
 
 # RUTINAS
 
-# <rutina> ::= <rutina> <sentencias> | empty
+#<rutina> ::= <sentencias> <rutina>
+#           | empty
 def p_rutina(p):
     '''
-    rutina : rutina sentencias 
+    rutina : sentencias rutina 
            | empty
     '''
     if len(p) == 3:
@@ -851,10 +893,11 @@ def p_rutina(p):
 
 # ESTRUCTURA DEL PROGRAMA
 
-# <zona_de_asignaciones> ::= <zona_de_asignaciones> <declaracion> | empty
+#<zona_de_asignaciones> ::= <declaracion> <zona_de_asignaciones>
+#                         | empty
 def p_zona_de_asignaciones(p):
     '''
-    zona_de_asignaciones : zona_de_asignaciones declaracion 
+    zona_de_asignaciones : declaracion zona_de_asignaciones
                          | empty
     '''
     if len(p) == 3:
@@ -862,10 +905,11 @@ def p_zona_de_asignaciones(p):
     else:
         p[0] = None
 
-# <zona_de_funciones> ::= <zona_de_funciones> <definicion_de_funcion> | empty
+#<zona_de_funciones> ::= <definicion_de_funcion> <zona_de_funciones>
+#                      | empty
 def p_zona_de_funciones(p):
     '''
-    zona_de_funciones : zona_de_funciones definicion_de_funcion 
+    zona_de_funciones : definicion_de_funcion zona_de_funciones
                       | empty
     '''
     if len(p) == 3:
@@ -873,7 +917,7 @@ def p_zona_de_funciones(p):
     else:
         p[0] = None
 
-# <zona_principal> ::= <inicio_main> <rutina> <fin_main>
+# <zona_principal> ::= INICIO <rutina> FIN
 def p_zona_principal(p):
     '''
     zona_principal : INICIO rutina FIN
