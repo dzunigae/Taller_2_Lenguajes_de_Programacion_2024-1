@@ -111,6 +111,15 @@ def t_error(t):
 
 # REGLAS DE PRODUCCIÓN
 
+#Simbolo de entrada
+
+# <start> ::= <zona_de_asignaciones> <zona_de_funciones> <zona_principal>
+def p_start(p):
+    '''
+    start : zona_de_asignaciones zona_de_funciones zona_principal
+    '''
+    p[0] = (p[1], p[2], p[3])
+
 # Definir una regla para manejar errores de sintaxis
 def p_error(p):
     print("Error de sintaxis en '%s'" % p.value if p else "EOF")
@@ -123,7 +132,11 @@ def p_empty(p):
 
 # Operadores
 
-# <operador_aritmético> ::= POTENCIACION | MAS | RESTA | MULTIPLICACION | DIVISION
+#<operador_aritmetico> ::= POTENCIACION 
+#                        | MAS 
+#                        | RESTA 
+#                        | MULTIPLICACION 
+#                        | DIVISION
 def p_operador_aritmetico(p):
     '''
     operador_aritmetico : POTENCIACION
@@ -134,7 +147,12 @@ def p_operador_aritmetico(p):
     '''
     p[0] = p[1]
 
-# <operador_relacional> ::= MENOR_IGUAL_QUE | MAYOR_IGUAL_QUE | DISTINTO_QUE | IGUAL_QUE | MENOR_QUE | MAYOR_QUE
+#<operador_relacional> ::= MENOR_IGUAL_QUE 
+#                        | MAYOR_IGUAL_QUE 
+#                        | DISTINTO_QUE 
+#                        | IGUAL_QUE 
+#                        | MENOR_QUE
+#                        | MAYOR_QUE
 def p_operador_relacional(p):
     '''
     operador_relacional : MENOR_IGUAL_QUE
@@ -146,7 +164,8 @@ def p_operador_relacional(p):
     '''
     p[0] = p[1]
 
-# <y_o> ::= Y | O 
+#<y_o> ::= Y 
+#        | O 
 def p_y_o(p):
     '''
     y_o : Y
@@ -156,7 +175,10 @@ def p_y_o(p):
 
 # Comodines compuestos
 
-# <palabras_clave_modelo> ::= ALFA | TAU | BETA | DELTA
+#<palabras_clave_modelo> ::= ALFA 
+#                          | TAU 
+#                          | BETA 
+#                          | DELTA
 def p_palabras_clave_modelo(p):
     '''
     palabras_clave_modelo : ALFA
@@ -168,7 +190,8 @@ def p_palabras_clave_modelo(p):
 
 # Datos compuestos
 
-# <numero> ::= INTEGER | FLOAT
+#<numero> ::= INTEGER 
+#           | FLOAT
 def p_numero(p):
     '''
     numero : INTEGER
@@ -178,40 +201,56 @@ def p_numero(p):
 
 # Factores compuestos
 
-# <identificador_opcional_id_compuesto> ::= CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO
-#                          | <identificador_opcional_id_compuesto> CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO
-#                          | empty
+# <identificador_opcional_id_compuesto> ::= CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO <identificador_opcional_id_compuesto>
+#                                         | empty
 def p_identificador_opcional_id_compuesto(p):
     '''
-    identificador_opcional_id_compuesto : CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO
-                                        | identificador_opcional_id_compuesto CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO
+    identificador_opcional_id_compuesto : CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO identificador_opcional_id_compuesto
                                         | empty
     '''
-    if len(p) == 4: 
-        p[0] = p[2]
-    elif len(p) == 5: 
-        p[0] = (p[1], p[3])
-    else:  
+    if len(p) == 5:
+        p[0] = (2,4)
+    else:
         p[0] = None
 
 # <id_compuesto> ::= ID <identificador_opcional_id_compuesto>
 def p_id_compuesto(p):
-    'id_compuesto : ID identificador_opcional_id_compuesto'
+    '''
+    id_compuesto : ID identificador_opcional_id_compuesto
+    '''
     p[0] = (p[1], p[2])
 
 # <variables_del_modelo> ::= <id_compuesto> CALL <palabras_clave_modelo>
 def p_variables_del_modelo(p):
-    'variables_del_modelo : id_compuesto CALL palabras_clave_modelo'
+    '''
+    variables_del_modelo : id_compuesto CALL palabras_clave_modelo
+    '''
     p[0] = (p[1], p[2], p[3])
 
 # Datos especiales
 
-# <funcion_del_lenguaje> ::= DIV | MOD | O_MAYOR | O_MENOR | TIPO | TAMANO | MULTICOTOMIZACION 
-#                            | DATOS_MODELO | DATOS_BLOQUE | DATOS_TRATAMIENTO | CONJUNTO_DATOS 
-#                            | CONJUNTO_DATOS_BLOQUE | CONJUNTO_DATOS_TRATAMIENTO | NUMERO_RACHAS_HASTA_DATO 
-#                            | RACHAS_CELDA | PROMEDIO_RACHAS_CELDA | RACHAS_BLOQUE | RACHAS_TRATAMIENTO
-#                            | PROMEDIO_RACHAS_BLOQUE | PROMEDIO_RACHAS_TRATAMIENTO | RACHAS_MODELO 
-#                            | PROMEDIO_RACHAS_MODELO
+#<funcion_del_lenguaje> ::= DIV 
+#                         | MOD 
+#                         | O_MAYOR 
+#                         | O_MENOR 
+#                         | TIPO 
+#                         | TAMANO 
+#                         | MULTICOTOMIZACION 
+#                         | DATOS_MODELO 
+#                         | DATOS_BLOQUE 
+#                         | DATOS_TRATAMIENTO 
+#                         | CONJUNTO_DATOS 
+#                         | CONJUNTO_DATOS_BLOQUE 
+#                         | CONJUNTO_DATOS_TRATAMIENTO 
+#                         | NUMERO_RACHAS_HASTA_DATO 
+#                         | RACHAS_CELDA 
+#                         | PROMEDIO_RACHAS_CELDA 
+#                         | RACHAS_BLOQUE 
+#                         | RACHAS_TRATAMIENTO
+#                         | PROMEDIO_RACHAS_BLOQUE 
+#                         | PROMEDIO_RACHAS_TRATAMIENTO 
+#                         | RACHAS_MODELO 
+#                         | PROMEDIO_RACHAS_MODELO
 def p_funcion_del_lenguaje(p):
     '''
     funcion_del_lenguaje : DIV
@@ -243,7 +282,8 @@ def p_funcion_del_lenguaje(p):
 
 # Comodines expresiones
 
-# <call_alfa> ::= CALL ALFA | empty
+# <call_alfa> ::= CALL ALFA 
+#               | empty
 def p_call_alfa(p):
     '''
     call_alfa : CALL ALFA
@@ -254,33 +294,37 @@ def p_call_alfa(p):
     else: 
         p[0] = None 
 
-# <menos_opcional> ::= RESTA | <menos_opcional> RESTA | empty
+#<menos_opcional> ::= RESTA <menos_opcional>
+#                   | empty
 def p_menos_opcional(p):
     '''
-    menos_opcional : RESTA
-                   | menos_opcional RESTA
+    menos_opcional : RESTA menos_opcional
                    | empty
     '''
-    if len(p) == 2:
-        p[0] = p[1] if p[1] != 'empty' else None 
-    elif len(p) == 3: 
+    if len(p) == 3:
         p[0] = (p[1], p[2])
+    else:
+        p[0] = None
 
-# <no_opcional> ::= NO | <no_opcional> NO | empty
+#<no_opcional> ::= NO <no_opcional>
+#                | empty
 def p_no_opcional(p):
     '''
-    no_opcional : NO
-                | no_opcional NO
+    no_opcional : NO no_opcional
                 | empty
     '''
-    if len(p) == 2: 
-        p[0] = p[1] if p[1] != 'empty' else None 
-    elif len(p) == 3:
-        p[0] = (p[1], p[2]) 
+    if len(p) == 3: 
+        p[0] = (p[1], p[2])
+    else:
+        p[0] = None
 
 # Expresiones en sí
 
-# <parametro_dato> ::= <id_compuesto> <call_alfa> | STRING | CHARACTER | <numero> | <invocacion_de_funcion>
+# <parametro_dato> ::= <id_compuesto> <call_alfa> 
+#                    | STRING 
+#                    | CHARACTER 
+#                    | <numero> 
+#                    | <invocacion_de_funcion>
 def p_parametro_dato(p):
     '''
     parametro_dato : id_compuesto call_alfa
@@ -294,7 +338,8 @@ def p_parametro_dato(p):
     else:
         p[0] = p[1]
 
-# <termino_aritmetico> ::= <parametro_dato> | PAR_ABRIENDO <expresion_aritmetica> PAR_CERRANDO
+# <termino_aritmetico> ::= <parametro_dato> 
+#                        | PAR_ABRIENDO <expresion_aritmetica> PAR_CERRANDO
 def p_termino_aritmetico(p):
     '''
     termino_aritmetico : parametro_dato
@@ -305,17 +350,24 @@ def p_termino_aritmetico(p):
     else: 
         p[0] = p[2]
 
-#<expresion_aritmetica> ::= <menos_opcional> <termino_aritmetico> 
-#                            | <expresion_aritmetica> <operador_aritmético> <menos_opcional> <termino_aritmetico>
+#<expresion_aritmetica_prima> ::= <operador_aritmetico> <menos_opcional> <termino_aritmetico> <expresion_aritmetica_prima>
+#                               | empty
+def p_expresion_aritmetica_prima(p):
+    '''
+    expresion_aritmetica_prima : operador_aritmetico menos_opcional termino_aritmetico expresion_aritmetica_prima
+                               | empty
+    '''
+    if len(p) == 5:
+        p[0] = (p[1], p[2], p[3], p[4])
+    else:
+        p[0] = None
+
+#<expresion_aritmetica> ::= <menos_opcional> <termino_aritmetico> <expresion_aritmetica_prima>
 def p_expresion_aritmetica(p):
     '''
-    expresion_aritmetica : menos_opcional termino_aritmetico
-                         | expresion_aritmetica operador_aritmetico menos_opcional termino_aritmetico
+    expresion_aritmetica : menos_opcional termino_aritmetico expresion_aritmetica_prima
     '''
-    if len(p) == 3: 
-        p[0] = (p[1], p[2])
-    else:
-        p[0] = (p[1], p[2], p[3], p[4])
+    p[0] = (p[1], p[2], p[3])
 
 # <expresion_relacional> ::= <expresion_aritmetica> <operador_relacional> <expresion_aritmetica>
 def p_expresion_relacional(p):
@@ -324,20 +376,27 @@ def p_expresion_relacional(p):
     '''
     p[0] = (p[1], p[2], p[3])
 
-#<expresion_relacional_compuesta> ::= <no_opcional> <expresion_relacional> 
-#                                       | <no_opcional> PAR_ABRIENDO <no_opcional> 
-#                                       <expresion_relacional_compuesta> PAR_CERRANDO
-def p_expresion_relacional_compuesta(p):
+#<expresion_relacional_compuesta_prima> ::= <expresion_relacional> 
+#                                         | PAR_ABRIENDO <no_opcional> <expresion_relacional_compuesta> PAR_CERRANDO
+def p_expresion_relacional_compuesta_prima(p):
     '''
-    expresion_relacional_compuesta : no_opcional expresion_relacional
-                                   | no_opcional PAR_ABRIENDO no_opcional expresion_relacional_compuesta PAR_CERRANDO
+    expresion_relacional_compuesta_prima : expresion_relacional 
+                                         | PAR_ABRIENDO no_opcional expresion_relacional_compuesta PAR_CERRANDO
     '''
-    if len(p) == 3: 
-        p[0] = (p[1], p[2])
-    else: 
-        p[0] = (p[1], p[3], p[4])
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = (p[2], p[3])
 
-# <termino_logico> ::= <expresion_relacional_compuesta> | PAR_ABRIENDO <expresion_logica> PAR_CERRANDO
+#<expresion_relacional_compuesta> ::= <no_opcional> <expresion_relacional_compuesta_prima>
+def expresion_relacional_compuesta(p):
+    '''
+    expresion_relacional_compuesta : no_opcional expresion_relacional_compuesta_prima
+    '''
+    p[0] = (p[1], p[2])
+
+#<termino_logico> ::= <expresion_relacional_compuesta> 
+#                   | PAR_ABRIENDO <expresion_logica> PAR_CERRANDO
 def p_termino_logico(p):
     '''
     termino_logico : expresion_relacional_compuesta
@@ -348,18 +407,27 @@ def p_termino_logico(p):
     else:
         p[0] = p[2]
 
-# <expresion_logica> ::= <no_opcional> <termino_logico> | <expresion_logica> <y_o> <no_opcional> <termino_logico>
+#<expresion_logica_prima> ::= <y_o> <no_opcional> <termino_logico> <expresion_logica_prima>
+#                           | empty
+def p_expresion_logica_prima(p):
+    '''
+    expresion_logica_prima : y_o no_opcional termino_logico expresion_logica_prima
+                           | empty
+    '''
+    if len(p) == 5:
+        p[0] = (p[1], p[2], p[3], p[4])
+    else:
+        p[0] = None
+
+#<expresion_logica> ::= <no_opcional> <termino_logico> <expresion_logica_prima>    
 def p_expresion_logica(p):
     '''
-    expresion_logica : no_opcional termino_logico
-                     | expresion_logica y_o no_opcional termino_logico
+    expresion_logica : no_opcional termino_logico expresion_logica_prima    
     '''
-    if len(p) == 3: 
-        p[0] = (p[1], p[2])
-    else: 
-        p[0] = (p[1], p[2], p[3], p[4])
+    p[0] = (p[1], p[2], p[3])
 
-# <conjunto_expresiones> ::= <expresion_logica> | <expresion_aritmetica>
+#<conjunto_expresiones> ::= <expresion_logica> 
+#                         | <expresion_aritmetica>
 def p_conjunto_expresiones(p):
     '''
     conjunto_expresiones : expresion_logica
@@ -809,15 +877,6 @@ def p_zona_de_funciones(p):
 def p_zona_principal(p):
     '''
     zona_principal : INICIO rutina FIN
-    '''
-    p[0] = (p[1], p[2], p[3])
-
-#Simbolo de entrada
-
-# <S> ::= <zona_de_asignaciones> <zona_de_funciones> <zona_principal>
-def p_start(p):
-    '''
-    start : zona_de_asignaciones zona_de_funciones zona_principal
     '''
     p[0] = (p[1], p[2], p[3])
 

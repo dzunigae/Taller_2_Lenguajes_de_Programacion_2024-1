@@ -1,49 +1,113 @@
 //Operadores
-<operador_aritmetico> ::= POTENCIACION | MAS | RESTA | MULTIPLICACION | DIVISION
-<operador_relacional> ::= MENOR_IGUAL_QUE | MAYOR_IGUAL_QUE | DISTINTO_QUE | IGUAL_QUE | MENOR_QUE
-                            | MAYOR_QUE
-<y_o> ::= Y | O 
+
+<operador_aritmetico> ::= POTENCIACION 
+                        | MAS 
+                        | RESTA 
+                        | MULTIPLICACION 
+                        | DIVISION
+
+<operador_relacional> ::= MENOR_IGUAL_QUE 
+                        | MAYOR_IGUAL_QUE 
+                        | DISTINTO_QUE 
+                        | IGUAL_QUE 
+                        | MENOR_QUE
+                        | MAYOR_QUE
+
+<y_o> ::= Y 
+        | O 
 
 //Comodines compuestos
-<palabras_clave_modelo> ::= ALFA | TAU | BETA | DELTA
+
+<palabras_clave_modelo> ::= ALFA 
+                          | TAU 
+                          | BETA 
+                          | DELTA
 
 //Datos compuestos
-<numero> ::= INTEGER | FLOAT
+
+<numero> ::= INTEGER 
+           | FLOAT
 
 //Factores compuestos
-<identificador_opcional_id_compuesto> ::= CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO
-                                            | <identificador_opcional_id_compuesto> CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO
-                                            | empty
+
+<identificador_opcional_id_compuesto> ::= CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO <identificador_opcional_id_compuesto>
+                                        | empty
+
 <id_compuesto> ::= ID <identificador_opcional_id_compuesto>
+
 <variables_del_modelo> ::= <id_compuesto> CALL <palabras_clave_modelo>
 
 //Datos especiales
-<funcion_del_lenguaje> ::= DIV | MOD | O_MAYOR | O_MENOR | TIPO | TAMANO | MULTICOTOMIZACION 
-                            | DATOS_MODELO | DATOS_BLOQUE | DATOS_TRATAMIENTO | CONJUNTO_DATOS 
-                            | CONJUNTO_DATOS_BLOQUE | CONJUNTO_DATOS_TRATAMIENTO | NUMERO_RACHAS_HASTA_DATO 
-                            | RACHAS_CELDA | PROMEDIO_RACHAS_CELDA | RACHAS_BLOQUE | RACHAS_TRATAMIENTO
-                            | PROMEDIO_RACHAS_BLOQUE | PROMEDIO_RACHAS_TRATAMIENTO | RACHAS_MODELO 
-                            | PROMEDIO_RACHAS_MODELO
+
+<funcion_del_lenguaje> ::= DIV 
+                         | MOD 
+                         | O_MAYOR 
+                         | O_MENOR 
+                         | TIPO 
+                         | TAMANO 
+                         | MULTICOTOMIZACION 
+                         | DATOS_MODELO 
+                         | DATOS_BLOQUE 
+                         | DATOS_TRATAMIENTO 
+                         | CONJUNTO_DATOS 
+                         | CONJUNTO_DATOS_BLOQUE 
+                         | CONJUNTO_DATOS_TRATAMIENTO 
+                         | NUMERO_RACHAS_HASTA_DATO 
+                         | RACHAS_CELDA 
+                         | PROMEDIO_RACHAS_CELDA 
+                         | RACHAS_BLOQUE 
+                         | RACHAS_TRATAMIENTO
+                         | PROMEDIO_RACHAS_BLOQUE 
+                         | PROMEDIO_RACHAS_TRATAMIENTO 
+                         | RACHAS_MODELO 
+                         | PROMEDIO_RACHAS_MODELO
 
 //EXPRESIONES
 
 //Comodines expresiones
-<call_alfa> ::= CALL ALFA | empty
-<menos_opcional> ::= RESTA | <menos_opcional> RESTA | empty
-<no_opcional> ::= NO | <no_opcional> NO | empty
+
+<call_alfa> ::= CALL ALFA 
+              | empty
+
+<menos_opcional> ::= RESTA <menos_opcional>
+                   | empty
+
+<no_opcional> ::= NO <no_opcional>
+                | empty             
 
 //Expresiones en sí
-<parametro_dato> ::= <id_compuesto> <call_alfa> | STRING | CHARACTER | <numero> | <invocacion_de_funcion>
-<termino_aritmetico> ::= <parametro_dato> | PAR_ABRIENDO <expresion_aritmetica> PAR_CERRANDO
-<expresion_aritmetica> ::= <menos_opcional> <termino_aritmetico> 
-                            | <expresion_aritmetica> <operador_aritmetico> <menos_opcional> <termino_aritmetico>
-<expresion_relacional> ::= <expresion_aritmetica> <operador_relacional> <expresion_aritmetica>
-<expresion_relacional_compuesta> ::= <no_opcional> <expresion_relacional> | <no_opcional> PAR_ABRIENDO <no_opcional>
-                                        <expresion_relacional_compuesta> PAR_CERRANDO
-<termino_logico> ::= <expresion_relacional_compuesta> | PAR_ABRIENDO <expresion_logica> PAR_CERRANDO
-<expresion_logica> ::= <no_opcional> <termino_logico> | <expresion_logica> <y_o> <no_opcional> <termino_logico>
 
-<conjunto_expresiones> ::= <expresion_logica> | <expresion_aritmetica>
+<parametro_dato> ::= <id_compuesto> <call_alfa> 
+                   | STRING 
+                   | CHARACTER 
+                   | <numero> 
+                   | <invocacion_de_funcion>
+
+<termino_aritmetico> ::= <parametro_dato> 
+                       | PAR_ABRIENDO <expresion_aritmetica> PAR_CERRANDO
+
+<expresion_aritmetica_prima> ::= <operador_aritmetico> <menos_opcional> <termino_aritmetico> <expresion_aritmetica_prima>
+                               | empty
+
+<expresion_aritmetica> ::= <menos_opcional> <termino_aritmetico> <expresion_aritmetica_prima>
+
+<expresion_relacional> ::= <expresion_aritmetica> <operador_relacional> <expresion_aritmetica>
+
+<expresion_relacional_compuesta_prima> ::= <expresion_relacional> 
+                                         | PAR_ABRIENDO <no_opcional> <expresion_relacional_compuesta> PAR_CERRANDO
+
+<expresion_relacional_compuesta> ::= <no_opcional> <expresion_relacional_compuesta_prima>
+
+<termino_logico> ::= <expresion_relacional_compuesta> 
+                   | PAR_ABRIENDO <expresion_logica> PAR_CERRANDO
+
+<expresion_logica_prima> ::= <y_o> <no_opcional> <termino_logico> <expresion_logica_prima>
+                           | empty
+
+<expresion_logica> ::= <no_opcional> <termino_logico> <expresion_logica_prima>            
+
+<conjunto_expresiones> ::= <expresion_logica> 
+                         | <expresion_aritmetica>
 
 //DECLARACION DE VARIABLES
 <datos_comunes_y_rachas> ::= ENTERO | REAL | CADENA | SIMBOLO | RACHA
