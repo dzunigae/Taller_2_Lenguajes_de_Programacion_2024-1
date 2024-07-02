@@ -4,11 +4,11 @@ start : zona_de_asignaciones zona_de_funciones zona_principal;
 
 zona_principal : INICIO rutina FIN;
 
-zona_de_funciones : definicion_de_funcion zona_de_funciones?;
+zona_de_funciones : (definicion_de_funcion zona_de_funciones)?;
 
-zona_de_asignaciones : declaracion zona_de_asignaciones?;
+zona_de_asignaciones : (declaracion zona_de_asignaciones)?;
 
-rutina : sentencias rutina?;
+rutina : (sentencias rutina)?;
 
 invocacion_de_funcion : funcion parametro_funcion;
 

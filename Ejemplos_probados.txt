@@ -38,20 +38,9 @@ modelo_y.beta[7];
 modelo_y.tau[7];
 modelo_y.delta[7][7];
 ## También se puede de la siguiente manera:
-modelo_y.beta[7].tau[7].delta[7][7]
+modelo_y.beta[7].tau[7].delta[7][7];
 ## El alfabeto vacío tendrá esta forma
 alfabeto alfabeto_y{};
-## Para añadir algo al alfabeto vacío se usa .add
-## No es necesario especificar nada del símbolo.
-alfabeto_y.add('a');
-alfabeto_y.add('b');
-alfabeto_y.add('c');
-alfabeto_y.add('d');
-alfabeto_y.add('e');
-alfabeto_y.add('f');
-alfabeto_y.add('g');
-alfabeto_y.add('h');
-alfabeto_y.add('i');
 
 # Explicación:
 Para cambiar el modelo, se puede asignar a él ún único valor una única vez, como por ejemplo lo siguiente: #
@@ -145,6 +134,18 @@ funcion cadena alfabeto_y_valores(arreglo valores, alfabeto relacionado){
 }
 
 inicio_main
+    ## Para añadir algo al alfabeto vacío se usa .add
+    ## No es necesario especificar nada del símbolo.
+    alfabeto_y.add('a');
+    alfabeto_y.add('b');
+    alfabeto_y.add('c');
+    alfabeto_y.add('d');
+    alfabeto_y.add('e');
+    alfabeto_y.add('f');
+    alfabeto_y.add('g');
+    alfabeto_y.add('h');
+    alfabeto_y.add('i');
+
     ## Ejemplos de notación científica
     mostrar(3.14)
     mostrar(2e10)
