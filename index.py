@@ -389,7 +389,7 @@ def p_expresion_relacional_compuesta_prima(p):
         p[0] = (p[2], p[3])
 
 #<expresion_relacional_compuesta> ::= <no_opcional> <expresion_relacional_compuesta_prima>
-def expresion_relacional_compuesta(p):
+def p_expresion_relacional_compuesta(p):
     '''
     expresion_relacional_compuesta : no_opcional expresion_relacional_compuesta_prima
     '''
@@ -600,8 +600,8 @@ def p_lista_de_llamados(p):
 #                              | <condicional>
 def p_condicional_anidado_prima(p):
     '''
-    condicional_anidado_prima> : LLAVE_ABRIENDO <rutina> LLAVE_CERRANDO
-                               | <condicional>
+    condicional_anidado_prima : LLAVE_ABRIENDO rutina LLAVE_CERRANDO
+                               | condicional
     '''
     if len(p) == 4:
         p[0] = p[2]
@@ -789,7 +789,7 @@ def p_sentencias(p):
 #                                    | empty
 def p_expresiones_separadas_por_comas(p):
     '''
-    <expresiones_separadas_por_comas> ::= <expresion_aritmetica> COMA <expresiones_separadas_por_comas>
+    expresiones_separadas_por_comas : expresion_aritmetica COMA expresiones_separadas_por_comas
                                         | empty
     '''
     if len(p) == 4:
@@ -934,11 +934,37 @@ lexer = lex.lex()
 # Construir el parser
 parser = yacc.yacc()
 
-while True:
-    try:
-        s = input('entero numero_1 = 11;')   # Ingresa una expresión
-    except EOFError:
-        break
-    if not s: continue
-    result = parser.parse(s)
-    print(result)
+resultado_gramatica = []
+
+# Función de prueba
+def prueba_sintactica(data):
+    global resultado_gramatica
+    resultado_gramatica.clear()
+
+    for item in data.splitlines():
+        if item:
+            gram = parser.parse(item)
+            if gram:
+                resultado_gramatica.append(str(gram))
+            else:
+                print("Error de sintaxis en la línea: ", item)
+        else:
+            print("Data vacía")
+
+    return resultado_gramatica
+
+if __name__ == '__main__':
+    while True:
+        try:
+            s = input('Ingrese dato >>> ')
+        except EOFError:
+            break
+        if not s: continue
+
+        try:
+            gram = parser.parse(s)
+            print("Resultado: ", gram)
+            prueba_sintactica(s)
+            print("Resultados de prueba sintáctica: ", resultado_gramatica)
+        except Exception as e:
+            print(f"Error: {e}")
