@@ -1,28 +1,18 @@
 grammar MiLenguaje;
 
-start : zona_de_asignaciones zona_de_funciones zona_principal;
+start : zona_de_asignaciones? zona_de_funciones? zona_principal;
 
 zona_principal : INICIO rutina FIN;
 
-zona_de_funciones : (definicion_de_funcion zona_de_funciones)?;
+zona_de_funciones : FUNCION datos_que_se_pueden_declarar_y_nada ID PAR_ABRIENDO (declaracion_de_datos_separados_por_comas datos_que_se_pueden_declarar ID)? PAR_CERRANDO LLAVE_ABRIENDO rutina LLAVE_CERRANDO zona_de_funciones;
 
-zona_de_asignaciones : (declaracion zona_de_asignaciones)?;
+zona_de_asignaciones : declaracion zona_de_asignaciones;
 
 rutina : (sentencias rutina)?;
-
-invocacion_de_funcion : funcion parametro_funcion;
-
-definicion_de_funcion : FUNCION datos_que_se_pueden_declarar_y_nada ID PAR_ABRIENDO mas_de_una_declaracion PAR_CERRANDO LLAVE_ABRIENDO rutina LLAVE_CERRANDO;
 
 datos_que_se_pueden_declarar_y_nada : datos_que_se_pueden_declarar | NADA;
 
 datos_que_se_pueden_declarar : datos_comunes_y_rachas | ARREGLO | ALFABETO | MODELO;
-
-funcion : funcion_del_lenguaje | ID;
-
-parametro_funcion : PAR_ABRIENDO expresiones_separadas_por_comas expresion_aritmetica PAR_CERRANDO;
-
-mas_de_una_declaracion : (declaracion_de_datos_separados_por_comas datos_que_se_pueden_declarar ID)?;
 
 declaracion_de_datos_separados_por_comas : (datos_que_se_pueden_declarar ID COMA declaracion_de_datos_separados_por_comas)?;
 
@@ -64,9 +54,7 @@ condicional_anidado : (SINO condicional_anidado_prima)?;
 
 condicional_anidado_prima : LLAVE_ABRIENDO rutina LLAVE_CERRANDO | condicional;
 
-lista_de_llamados : (CORCHETE_ABRIENDO entero_o_vacio CORCHETE_CERRANDO lista_de_llamados)?;
-
-entero_o_vacio : INTEGER?;
+lista_de_llamados : (CORCHETE_ABRIENDO INTEGER? CORCHETE_CERRANDO lista_de_llamados)?;
 
 modelo_implicito : MODELO ID LLAVE_ABRIENDO LLAVE_CERRANDO PUNTO_COMA ID CALL BETA CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO PUNTO_COMA ID CALL TAU CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO PUNTO_COMA ID CALL DELTA CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO PUNTO_COMA
                     | ID CALL BETA CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CALL TAU CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CALL DELTA CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO PUNTO_COMA;
@@ -117,36 +105,16 @@ expresion_aritmetica_prima : (operador_aritmetico menos_opcional termino_aritmet
 
 termino_aritmetico : parametro_dato | PAR_ABRIENDO expresion_aritmetica PAR_CERRANDO;
 
-parametro_dato : id_compuesto call_alfa | STRING | CHARACTER | numero | invocacion_de_funcion;
+parametro_dato : id_compuesto (CALL ALFA)? | STRING | CHARACTER | INTEGER | FLOAT | funcion PAR_ABRIENDO expresiones_separadas_por_comas expresion_aritmetica PAR_CERRANDO;
 
 no_opcional : (NO no_opcional)?;
 
 menos_opcional : (RESTA menos_opcional)?;
 
-call_alfa : (CALL ALFA)?;
-
-funcion_del_lenguaje : DIV
-                         | MOD
-                         | O_MAYOR
-                         | O_MENOR
-                         | TIPO
-                         | TAMANO
-                         | MULTICOTOMIZACION
-                         | DATOS_MODELO
-                         | DATOS_BLOQUE
-                         | DATOS_TRATAMIENTO
-                         | CONJUNTO_DATOS
-                         | CONJUNTO_DATOS_BLOQUE
-                         | CONJUNTO_DATOS_TRATAMIENTO
-                         | NUMERO_RACHAS_HASTA_DATO
-                         | RACHAS_CELDA
-                         | PROMEDIO_RACHAS_CELDA
-                         | RACHAS_BLOQUE
-                         | RACHAS_TRATAMIENTO
-                         | PROMEDIO_RACHAS_BLOQUE
-                         | PROMEDIO_RACHAS_TRATAMIENTO
-                         | RACHAS_MODELO
-                         | PROMEDIO_RACHAS_MODELO;
+funcion : DIV | MOD | O_MAYOR | O_MENOR | TIPO | TAMANO | MULTICOTOMIZACION | DATOS_MODELO | DATOS_BLOQUE | DATOS_TRATAMIENTO
+        | CONJUNTO_DATOS | CONJUNTO_DATOS_BLOQUE | CONJUNTO_DATOS_TRATAMIENTO | NUMERO_RACHAS_HASTA_DATO | RACHAS_CELDA
+        | PROMEDIO_RACHAS_CELDA | RACHAS_BLOQUE | RACHAS_TRATAMIENTO | PROMEDIO_RACHAS_BLOQUE | PROMEDIO_RACHAS_TRATAMIENTO
+        | RACHAS_MODELO | PROMEDIO_RACHAS_MODELO | ID;
 
 variables_del_modelo : id_compuesto CALL palabras_clave_modelo;
 
@@ -154,24 +122,13 @@ id_compuesto : ID identificador_opcional_id_compuesto;
 
 identificador_opcional_id_compuesto : (CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO identificador_opcional_id_compuesto)?;
 
-numero : INTEGER | FLOAT;
-
 palabras_clave_modelo : ALFA | TAU | BETA | DELTA;
 
 y_o : Y | O;
 
-operador_relacional : MENOR_IGUAL_QUE
-                        | MAYOR_IGUAL_QUE
-                        | DISTINTO_QUE
-                        | IGUAL_QUE
-                        | MENOR_QUE
-                        | MAYOR_QUE;
+operador_relacional : MENOR_IGUAL_QUE | MAYOR_IGUAL_QUE | DISTINTO_QUE | IGUAL_QUE | MENOR_QUE | MAYOR_QUE;
 
-operador_aritmetico : POTENCIACION
-                        | MAS
-                        | RESTA
-                        | MULTIPLICACION
-                        | DIVISION;
+operador_aritmetico : POTENCIACION | MAS | RESTA | MULTIPLICACION | DIVISION;
 
 MOSTRAR: 'mostrar';
 SI: 'si';
