@@ -1,20 +1,10 @@
-## Esta línea es un comentario
-# Esto
-también 
-es 
-un 
-comentario #
+## Zona de Declaraciones
 
-## La estructura es la siguiente: variables globales, funciones y main
-
-## Declaraciones de datos y estructuras de datos comunes
 entero numero_1 = 11;
-real numero_x = (5.0/7.0) + (11.78+67.099) * 9.99; ## Los números reales deben tener si o si el "punto" que los distingue de los enteros.
-simbolo simbolo_x = 'p'
-arreglo arreglo_x = [[4,5], 7.0, [9,0,0.809,[11,11.0]]]; ## Los arreglos son tremendamente flexibles, esta corresponde a una declaración explícita.
-arreglo arreglo_y[4] = []; ## Declaración implicita de un arreglo con 4 posiciones.
-
-## Declaraciones de datos especiales de teoría de rachas
+real numero_x = (5.0/7.0) + (11.78+67.099) * 9.99;
+simbolo simbolo_x = 'p';
+arreglo arreglo_x = [[4,5], 7.0, [9,0,0.809,[11,11.0]]]; 
+arreglo arreglo_y[4] = []; 
 racha racha_x = "uuuuu";
 modelo modelo_x{
     alfa: 4.7,
@@ -30,39 +20,22 @@ modelo modelo_x{
     ]
 };
 alfabeto alfabeto_x{'d','f','r','g','t','y','u'};
+alfabeto alfabeto_y{};
 
-## Declaraciones por defecto de modelos y alfabetos
+## Declaraciones explicitas del modelo
+
+# Forma 1
+
 modelo modelo_y{};
-## Alfa tendrá valor por defecto 0.0, los demás atributos al ser arreglos, se debe especificar su tamaño.
 modelo_y.beta[7];
 modelo_y.tau[7];
 modelo_y.delta[7][7];
-## También se puede de la siguiente manera:
-modelo_y.beta[7].tau[7].delta[7][7];
-## El alfabeto vacío tendrá esta forma
-alfabeto alfabeto_y{};
 
-# Explicación:
-Para cambiar el modelo, se puede asignar a él ún único valor una única vez, como por ejemplo lo siguiente: #
-modelo_y.alfa = 9.0;
-modelo_y.beta = [1.0,2.0,3.0,4.0,5.0,6.0,7.0];
-modelo_y.tau = [1.0,2.0,3.0,4.0,5.0,6.0,7.0];
-modelo_y.delta = [
-    [1.0,2.0,3.0,4.0,5.0,6.0,7.0],
-    [1.0,2.0,3.0,4.0,5.0,6.0,7.0],
-    [1.0,2.0,3.0,4.0,5.0,6.0,7.0],
-    [1.0,2.0,3.0,4.0,5.0,6.0,7.0],
-    [1.0,2.0,3.0,4.0,5.0,6.0,7.0],
-    [1.0,2.0,3.0,4.0,5.0,6.0,7.0],
-    [1.0,2.0,3.0,4.0,5.0,6.0,7.0]
-]; ## Con delta, los datos se acomodan de forma automática en el modelo.
-## Para acceder a valores de celdas, filas o columnas, es de la siguiente manera.
-## Celda 1-1
-modelo_y.delta[1][1];
-## Fila 1
-modelo_y.delta[1][];
-## Columna 1
-modelo_y.delta[][1];
+## Forma 2
+
+modelo_y.beta[7].tau[7].delta[7][7];
+
+## Zona de funciones
 
 funcion nada mostrar_valor(entero x){
     mostrar(x);
@@ -89,38 +62,33 @@ funcion arreglo switch(arreglo x){
     }
 }
 
-## Esta función sólo modificará una variable
-funcion nada ciclos(arreglo x, arreglo yy){
-    cadena string = ""; ## Cadena vacía
+funcion arreglo ciclos(arreglo x, arreglo yy){
     entero i = 0;
 
     ## Forma 1
     repita{
         yy[i] = x[i];
         i = i + 1;
-    }mientras(i < tamaño(x))
+    }mientras(i < tamano(x))
 
     i = 0;
 
     ## Forma 2
-    mientras(i < tamaño(x)){
+    mientras(i < tamano(x)){
         yy[i] = x[i];
         i = i + 1;
     }
 
     ## Forma 3
-    para(entero i = 0 hasta i == tamaño(x)){
+    para(entero i = 0 hasta i == tamano(x)){
         yy[i] = x[i];
     }
 
-    y[tamaño[yy] - 1] = string;
-
-    retornar nada;
+    retornar yy;
 }
 
-## Función de relaciones para valores y alfabeto
 funcion cadena alfabeto_y_valores(arreglo valores, alfabeto relacionado){
-    para(i = 0 hasta i == tamaño(valores)){
+    para(entero i = 0 hasta i == tamano(valores)){
         si(valores >= 0.0 y valores < 5.0){
             retornar relacionado[0];
         }sino si(valores >= 5.0 y valores < 7.0){
@@ -133,9 +101,27 @@ funcion cadena alfabeto_y_valores(arreglo valores, alfabeto relacionado){
     }
 }
 
+## Zona principal
+
 inicio_main
-    ## Para añadir algo al alfabeto vacío se usa .add
-    ## No es necesario especificar nada del símbolo.
+
+    ## Reasignación de variables del modelo
+
+    modelo_y.alfa = 9.0;
+    modelo_y.beta = [1.0,2.0,3.0,4.0,5.0,6.0,7.0];
+    modelo_y.tau = [1.0,2.0,3.0,4.0,5.0,6.0,7.0];
+    modelo_y.delta = [
+        [1.0,2.0,3.0,4.0,5.0,6.0,7.0],
+        [1.0,2.0,3.0,4.0,5.0,6.0,7.0],
+        [1.0,2.0,3.0,4.0,5.0,6.0,7.0],
+        [1.0,2.0,3.0,4.0,5.0,6.0,7.0],
+        [1.0,2.0,3.0,4.0,5.0,6.0,7.0],
+        [1.0,2.0,3.0,4.0,5.0,6.0,7.0],
+        [1.0,2.0,3.0,4.0,5.0,6.0,7.0]
+    ];
+
+    ## Para añadir algo al alfabeto vacío se usa .ADD
+
     alfabeto_y.add('a');
     alfabeto_y.add('b');
     alfabeto_y.add('c');
@@ -147,24 +133,16 @@ inicio_main
     alfabeto_y.add('i');
 
     ## Ejemplos de notación científica
-    mostrar(3.14)
-    mostrar(2e10)
-    mostrar(2.5E-4)
-    mostrar(1E4)
-    mostrar(-5e+3)
 
-    ## Ejecución de funciones antes declaradas
+    mostrar(3.14);
+    mostrar(2e10);
+    mostrar(2.5E-4);
+    mostrar(1E4);
+    mostrar(-5e+3);
 
-    mostrar_valor(numero_1);
+    ## Ejemplo llamado de función
+
     real real_1 = if(numero_x);
-    arreglo arreglo_1 = switch(arreglo_x);
-    ciclos(arreglo_x,arreglo_y);
-
-    ## Ejecución de funciones especiales de la teoría de rachas
-
-    cadena cosa = "aaaahhhhhhyyyyuuuujjjjkkkkkmmmmllllssssooop";
-    arreglo valores = [4.0,5.6,7.8,9.0];
-    alfabeto alfabeto_relacionado{'a','b','c','d'};
 
     ## Proceso de multicotomización
     cadena cadena_multicotomizada = multicotomizacion(valores,alfabeto_relacionado,alfabeto_y_valores);
@@ -215,5 +193,5 @@ inicio_main
     entero n = rachas_modelo(modelo_x);
 
     ## Función especial que da el promedio del número de rachas de todo el modelo.
-    real o = promedio_rachas_modelo(modelo_x);
+    real oo = promedio_rachas_modelo(modelo_x);
 fin_main
