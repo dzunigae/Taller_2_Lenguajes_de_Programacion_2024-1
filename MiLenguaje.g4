@@ -1,12 +1,12 @@
 grammar MiLenguaje;
 
-start : zona_de_asignaciones? zona_de_funciones? zona_principal;
+start : zona_de_asignaciones zona_de_funciones? zona_principal;
 
 zona_principal : INICIO rutina FIN;
 
 zona_de_funciones : FUNCION datos_que_se_pueden_declarar_y_nada ID PAR_ABRIENDO (declaracion_de_datos_separados_por_comas datos_que_se_pueden_declarar ID)? PAR_CERRANDO LLAVE_ABRIENDO rutina LLAVE_CERRANDO zona_de_funciones?;
 
-zona_de_asignaciones : declaracion zona_de_asignaciones;
+zona_de_asignaciones : (declaracion zona_de_asignaciones)?;
 
 rutina : (sentencias rutina)?;
 
@@ -22,7 +22,7 @@ sentencias : imprimir_en_consola | condicional | switch | bucle_repita_mientras 
 
 anadir_a_alfabeto : id_compuesto CALL ADD PAR_ABRIENDO CHARACTER PAR_CERRANDO PUNTO_COMA;
 
-asignacion : posibles_variables_a_reasignar ASSIGNMENT_OPERATOR posibles_asignaciones;
+asignacion : posibles_variables_a_reasignar ASSIGNMENT_OPERATOR posibles_asignaciones PUNTO_COMA;
 
 declaracion : declaracion_datos_comunes_y_rachas | arreglo_implicito | arreglo_explicito | alfabeto_explicito | alfabeto_implicito | modelo_explicito | modelo_implicito;
 
@@ -48,7 +48,7 @@ valores_de_retorno : conjunto_expresiones | lista_explicita | variables_del_mode
 
 variables_del_modelo_extendidas : variables_del_modelo lista_de_llamados;
 
-interior_switch : (id_compuesto operador_relacional expresion_aritmetica COLON rutina PUNTO_COMA interior_switch)?;
+interior_switch : (id_compuesto operador_relacional expresion_aritmetica COLON rutina interior_switch)?;
 
 condicional_anidado : (SINO condicional_anidado_prima)?;
 
@@ -120,11 +120,13 @@ variables_del_modelo : id_compuesto CALL palabras_clave_modelo;
 
 id_compuesto : ID identificador_opcional_id_compuesto;
 
-identificador_opcional_id_compuesto : (CORCHETE_ABRIENDO INTEGER CORCHETE_CERRANDO identificador_opcional_id_compuesto)?;
+identificador_opcional_id_compuesto : (CORCHETE_ABRIENDO integer_id CORCHETE_CERRANDO identificador_opcional_id_compuesto)?;
 
 palabras_clave_modelo : ALFA | TAU | BETA | DELTA;
 
 y_o : Y | O;
+
+integer_id : INTEGER | ID;
 
 operador_relacional : MENOR_IGUAL_QUE | MAYOR_IGUAL_QUE | DISTINTO_QUE | IGUAL_QUE | MENOR_QUE | MAYOR_QUE;
 
